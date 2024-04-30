@@ -1,38 +1,68 @@
+/* App.css */
+
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background-color: #007bff;
   color: white;
+  padding: 20px;
+  border-bottom: 2px solid #0056b3;
 }
 
-.App-link {
-  color: #61dafb;
+.App-header h1 {
+  margin: 0;
+  font-size: 36px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.App-header p {
+  margin: 10px 0 0;
+  font-size: 18px;
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.menu button {
+  background-color: transparent;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 10px;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Adicionado transição de cor */
+}
+
+.menu button:not(.active) {
+  color: #007bff; /* Cor dos botões não selecionados */
+}
+
+.menu button.active {
+  background-color: #0056b3;
+}
+
+.main-content {
+  flex: 1;
+}
+
+footer {
+  margin-top: auto;
+  padding: 10px 0;
+  background-color: #f8f9fa;
+  font-size: 14px;
+  color: #666;
+}
+
+.logo {
+  width: 256px; /* Defina a largura desejada */
+  height: auto; /* Mantenha a altura automática para manter a proporção */
 }
