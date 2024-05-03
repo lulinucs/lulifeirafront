@@ -170,3 +170,13 @@
   background-color: #4CAF50; /* Verde para salvar */
   color: #fff; /* Texto branco */
 }
+
+@media (max-width: 768px) {
+  .lista-livros table {
+    font-size: 12px; /* Reduz a fonte para dispositivos móveis */
+  }
+  .lista-livros th,
+  .lista-livros td {
+    padding: 8px; /* Reduz o padding para economizar espaço */
+  }
+}

@@ -2,7 +2,6 @@
 
 .App {
   text-align: center;
-  padding: 20px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -25,6 +24,23 @@
   font-size: 18px;
 }
 
+.mobile-menu-icon {
+  display: none;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.bar {
+  width: 30px;
+  height: 3px;
+  background-color: #fff;
+  margin: 6px 0;
+  transition: 0.4s;
+}
+
 .menu {
   display: flex;
   justify-content: center;
@@ -34,16 +50,17 @@
 .menu button {
   background-color: transparent;
   border: none;
+  width: 100%;
   padding: 10px 20px;
   margin: 0 10px;
   cursor: pointer;
   color: white;
   font-size: 16px;
-  transition: background-color 0.3s ease, color 0.3s ease; /* Adicionado transição de cor */
+  transition: background-color 0.3s ease, color 0.3s ease; 
 }
 
 .menu button:not(.active) {
-  color: #007bff; /* Cor dos botões não selecionados */
+  color: #007bff; 
 }
 
 .menu button.active {
@@ -63,6 +80,36 @@ footer {
 }
 
 .logo {
-  width: 256px; /* Defina a largura desejada */
-  height: auto; /* Mantenha a altura automática para manter a proporção */
+  width: 256px;
+  height: auto; 
+}
+
+@media (max-width: 768px) {
+  .menu {
+    display: none;
+  }
+
+  .menu.open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: #ffffffd8;
+    z-index: 999;
+    border-radius: 10px;
+  }
+
+  .mobile-menu-icon {
+    display: block;
+  }
+
+}
+
+@media only screen and (max-width: 600px) {
+  .hide-mobile {
+    display: none;
+  }
 }
