@@ -70,3 +70,25 @@
 .erro {
   color: red;
 }
+
+.disabled-button {
+  background-color: #ccc; /* Cor de fundo cinza */
+  color: #666; /* Cor do texto cinza */
+  cursor: not-allowed; /* Cursor de não permitido */
+}
+
+.discount-input {
+  width: 40px; /* Defina o tamanho do input */
+  padding: 8px; /* Adicione algum espaço interno */
+  border: none; /* Remova a borda */
+  border-radius: 5px; /* Adicione cantos arredondados */
+  text-align: center; /* Centralize o texto */
+  font-size: 16px; /* Ajuste o tamanho da fonte */
+  background-color: #f2f2f2; /* Adicione uma cor de fundo */
+  transition: background-color 0.3s; /* Adicione uma transição suave */
+}
+
+.discount-input:focus {
+  outline: none; /* Remova o contorno do foco */
+  background-color: #e0e0e0; /* Altere a cor de fundo ao focar */
+}

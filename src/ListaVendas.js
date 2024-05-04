@@ -37,7 +37,6 @@ const ListaVendas = () => {
     setDataSelecionada(event.target.value);
   };
   
-
   const formatarTimestamp = (timestamp) => {
     const data = new Date(timestamp);
     const dia = String(data.getDate()).padStart(2, '0');
@@ -136,23 +135,25 @@ const ListaVendas = () => {
       </div>
 
       <div className="vendas-container">
-  {vendas
-    .filter((venda) => {
-      // Se dataSelecionada não estiver vazio, filtre as vendas pela data
-      if (dataSelecionada) {
-        const dataVenda = new Date(venda.timestamp).toISOString().slice(0, 10); // Converta o timestamp da venda para uma string de data
-        return dataVenda === dataSelecionada;
-      }
-      // Se dataSelecionada estiver vazio, exiba todas as vendas
-      return true;
-    })
-    .map((venda) => (
-      <div key={venda._id} className="venda" onClick={() => abrirModal(venda._id)}>
-        <p className="timestamp">{formatarTimestamp(venda.timestamp)}</p>
-        <p className="valor-final">R$ {venda.total.toFixed(2)}</p>
+        {vendas
+          .filter((venda) => {
+            // Se dataSelecionada não estiver vazio, filtre as vendas pela data
+            if (dataSelecionada) {
+              const dataVenda = new Date(venda.timestamp).toISOString().slice(0, 10); // Converta o timestamp da venda para uma string de data
+              return dataVenda === dataSelecionada;
+            }
+            // Se dataSelecionada estiver vazio, exiba todas as vendas
+            return true;
+          })
+          .map((venda) => (
+            <div key={venda._id} className="venda-card" onClick={() => abrirModal(venda._id)}>
+              <div className="card-content">
+                <p className="timestamp">{formatarTimestamp(venda.timestamp)}</p>
+                <p className="valor-final">R$ {venda.total.toFixed(2)}</p>
+              </div>
+            </div>
+          ))}
       </div>
-    ))}
-</div>
 
       {/* Modal */}
       {vendaSelecionada && (
@@ -160,55 +161,39 @@ const ListaVendas = () => {
           <div className="modal-content">
             <span className="close" onClick={fecharModal}>&times;</span>
             <h2>Detalhes da Venda</h2>
-            <p>ID: {vendaSelecionada._id}</p>
-            <p>{formatarTimestamp(vendaSelecionada.timestamp)}</p>
+            <p className="date">{formatarTimestamp(vendaSelecionada.timestamp)}</p>
 
             <h3>Livros</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>ISBN</th>
-                  <th>Título</th>
-                  <th>Autor</th>
-                  <th>Editora</th>
-                  <th>Valor Real</th>
-                  <th>Valor Vendido</th>
-                  <th>Quantidade</th>
-                </tr>
-              </thead>
-              <tbody>
-                {vendaSelecionada.livros.map((livro) => (
-                  <tr key={livro._id}>
-                    <td>{livro.livro.ISBN}</td>
-                    <td>{livro.livro.Título}</td>
-                    <td>{livro.livro.Autor}</td>
-                    <td>{livro.livro.Editora}</td>
-                    <td>R$ {livro.livro.Valor.toFixed(2)}</td>
-                    <td>R$ {livro.subtotal ? livro.subtotal.toFixed(2) : 'Indisponível'}</td>
-                    <td>{livro.quantidade}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <p>Total: R$ {vendaSelecionada.total.toFixed(2)}</p>
-            <div className="card">
-              
+            {vendaSelecionada.livros.map((livro) => (
+              <div key={livro._id} className="livro-card">
+                <div className="quantidade"> {livro.quantidade}x</div>
+              <div className="isbn">{livro.livro.ISBN}</div>
+              <div className="titulo">{livro.livro.Título}</div>
+              <div className="valor">R$ {livro.livro.Valor.toFixed(2)}</div>
+      
+            </div>
+            ))}
+           <div className="total-container">
+            <p className="total-label">Total</p>
+            <p className="valor-total-modal">R$ {vendaSelecionada.total.toFixed(2)}</p>
+          </div>
+           <div className="card">
               {vendaSelecionada.cliente && (
                 <div className="info-column">
-                {vendaSelecionada.cliente.nome && <p>Nome: {vendaSelecionada.cliente.nome}</p>}
-                {vendaSelecionada.cliente.cpf && <p>CPF: {vendaSelecionada.cliente.cpf}</p>}
-                {vendaSelecionada.cliente.email && <p>Email: {vendaSelecionada.cliente.email}</p>}
-                {vendaSelecionada.cliente.telefone && <p>Telefone: {vendaSelecionada.cliente.telefone}</p>}
-              </div>
+                  {vendaSelecionada.cliente.nome && <p>Nome: {vendaSelecionada.cliente.nome}</p>}
+                  {vendaSelecionada.cliente.cpf && <p>CPF: {vendaSelecionada.cliente.cpf}</p>}
+                  {vendaSelecionada.cliente.email && <p>Email: {vendaSelecionada.cliente.email}</p>}
+                  {vendaSelecionada.cliente.telefone && <p>Telefone: {vendaSelecionada.cliente.telefone}</p>}
+                </div>
               )}
               {vendaSelecionada.cliente && (
                 <div className="info-column">
-                {vendaSelecionada.cliente.cep && <p>CEP: {vendaSelecionada.cliente.cep}</p>}
-                {vendaSelecionada.cliente.endereco && <p>Endereço: {vendaSelecionada.cliente.endereco}</p>}
-                {vendaSelecionada.cliente.bairro && <p>Bairro: {vendaSelecionada.cliente.bairro}</p>}
-                {vendaSelecionada.cliente.cidade && <p>Cidade: {vendaSelecionada.cliente.cidade}</p>}
-                {vendaSelecionada.cliente.estado && <p>Estado: {vendaSelecionada.cliente.estado}</p>}
-              </div>
+                  {vendaSelecionada.cliente.cep && <p>CEP: {vendaSelecionada.cliente.cep}</p>}
+                  {vendaSelecionada.cliente.endereco && <p>Endereço: {vendaSelecionada.cliente.endereco}</p>}
+                  {vendaSelecionada.cliente.bairro && <p>Bairro: {vendaSelecionada.cliente.bairro}</p>}
+                  {vendaSelecionada.cliente.cidade && <p>Cidade: {vendaSelecionada.cliente.cidade}</p>}
+                  {vendaSelecionada.cliente.estado && <p>Estado: {vendaSelecionada.cliente.estado}</p>}
+                </div>
               )}
               {!vendaSelecionada.cliente && (
                 <div className="info-column">
@@ -226,7 +211,7 @@ const ListaVendas = () => {
                       <input type="text" name="estado" value={novoCliente.estado} onChange={handleInputChange} placeholder="Estado" />
                       <br />
                       <button className="adicionar-cliente-button" onClick={adicionarNovoCliente}>Salvar</button>
-                      <button  className="fechar-button" onClick={() => setMostrarFormulario(!mostrarFormulario)}>
+                      <button className="fechar-button" onClick={() => setMostrarFormulario(!mostrarFormulario)}>
                         {mostrarFormulario ? "Fechar" : "Fechar"}
                       </button>
                     </div>
@@ -245,3 +230,4 @@ const ListaVendas = () => {
 };
 
 export default ListaVendas;
+

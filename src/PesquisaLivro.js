@@ -9,7 +9,6 @@ function PesquisaLivro() {
   const [livro, setLivro] = useState(null);
   const [erro, setErro] = useState('');
   const [showScanner, setShowScanner] = useState(false); // Estado para controlar a exibição do BarcodeScanner
-  const [livrosVendidos, setLivrosVendidos] = useState([]);
 
   const handleInputChange = (event) => {
     setIsbn(event.target.value);
@@ -53,17 +52,27 @@ function PesquisaLivro() {
   // Função para registrar a venda do livro pesquisado
   const handleRegistrarVenda = async () => {
     try {
-      // Verifica se o livro já está na lista de livros vendidos
-      const existingBookIndex = livrosVendidos.findIndex(item => item.ISBN === livro.ISBN);
-      if (existingBookIndex !== -1) {
-        // Se o livro já estiver na lista, atualiza a quantidade vendida
-        const updatedLivrosVendidos = [...livrosVendidos];
-        updatedLivrosVendidos[existingBookIndex].Quantidade += 1;
-        setLivrosVendidos(updatedLivrosVendidos);
-      } else {
-        // Se o livro não estiver na lista, adiciona-o
-        setLivrosVendidos([...livrosVendidos, { ...livro, Quantidade: 1 }]);
+      const response = await fetch(`${apiUrl}/registrar-venda`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cliente: null, // Informe o ID do cliente se necessário
+          livros: [{
+            livro: livro._id,
+            quantidade: 1, // Apenas uma unidade do livro
+            desconto: livro['Valor Feira'], // Desconto igual ao valor 'Valor Feira'
+            subtotal: livro['Valor Feira'], // Subtotal igual ao valor 'Valor Feira'
+          }],
+          total: livro['Valor Feira'], // Total igual ao valor 'Valor Feira'
+        }),
+      });
+      if (!response.ok) {
+        throw new Error('Erro ao registrar a venda');
       }
+      console.log('Venda registrada com sucesso:', response.data);
+      // Limpar estado após o registro da venda
       setLivro(null);
       setErro('');
     } catch (error) {
@@ -102,36 +111,13 @@ function PesquisaLivro() {
           <p><strong>Valor Feira:</strong> R${livro['Valor Feira'].toFixed(2)}</p>
           <p><strong>Estoque:</strong> {livro.Estoque}</p>
           {/* Botão para registrar a venda */}
-          <button className="register-sale-button" onClick={handleRegistrarVenda}>
+          <button
+            className={`register-sale-button ${livro.Estoque < 1 ? 'disabled-button' : ''}`}
+            onClick={handleRegistrarVenda}
+            disabled={livro.Estoque < 1}
+          >
             <FaShoppingCart /> {/* Ícone de carrinho de compras */}
           </button>
-        </div>
-      )}
-      {livrosVendidos.length > 0 && (
-        <div className="livros-vendidos">
-          <h2>Livros Vendidos</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>ISBN</th>
-                <th>Título</th>
-                <th>Editora</th>
-                <th>Valor Vendido</th>
-                <th>Quantidade</th>
-              </tr>
-            </thead>
-            <tbody>
-              {livrosVendidos.map((livroVendido, index) => (
-                <tr key={index}>
-                  <td>{livroVendido.ISBN}</td>
-                  <td>{livroVendido.Título}</td>
-                  <td>{livroVendido.Editora}</td>
-                  <td>{livroVendido['Valor Feira']}</td>
-                  <td>{livroVendido.Quantidade}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       )}
       {erro && <p className="erro">{erro}</p>}

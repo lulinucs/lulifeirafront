@@ -25,17 +25,13 @@
   padding: 12px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 20px;
   transition: border-color 0.3s;
 }
 
 .input-group input:focus {
   outline: none;
   border-color: #6c63ff;
-}
-
-.lista-livros {
-  margin-top: 20px;
 }
 
 .lista-livros table {
@@ -52,6 +48,41 @@
 
 .lista-livros th {
   background-color: #f2f2f2;
+}
+
+.lista-livros .total-row {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.lista-livros .total-row td {
+  padding-top: 20px;
+}
+
+.lista-livros .total-row td:first-child {
+  font-weight: bold;
+}
+
+.lista-livros .quantidade-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.lista-livros .quantidade-buttons svg {
+  cursor: pointer;
+  margin-right: 5px;
+  border-radius: 50%;
+  padding: 5px;
+  background-color: #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.lista-livros .quantidade-buttons svg:hover {
+  background-color: #aaa;
+}
+
+.lista-livros .quantidade {
+  margin: 0 5px;
 }
 
 .erro {
@@ -170,6 +201,20 @@
   background-color: #4CAF50; /* Verde para salvar */
   color: #fff; /* Texto branco */
 }
+
+.remove-button {
+  background-color: #ccc;
+  border: none;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.remove-button:hover {
+  background-color: #aaa;
+}
+
 
 @media (max-width: 768px) {
   .lista-livros table {

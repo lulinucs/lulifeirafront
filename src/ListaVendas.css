@@ -1,5 +1,7 @@
 /* ListaVendas.css */
 
+/* ListaVendas.css */
+
 .ListaVendas {
   max-width: 90%;
   margin: 20px auto;
@@ -9,18 +11,28 @@
   background-color: #f9f9f9;
 }
 
+.vendas-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
 
-.venda {
-  display: flex; /* Adiciona display flex para alinhar itens */
-  justify-content: space-between; /* Distribui os itens ao longo do eixo principal */
-  align-items: center; /* Centraliza verticalmente os itens */
+.venda-card {
+  width: calc(33.33% - 20px); /* Definindo 3 colunas com espaçamento entre elas */
+  margin-bottom: 20px;
   cursor: pointer;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 8px;
+}
+
+.card-content {
+  padding: 20px;
+  border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
   transition: transform 0.3s ease;
+}
+
+.card-content:hover {
+  transform: translateY(-5px);
 }
 
 .venda:hover {
@@ -30,12 +42,50 @@
 .timestamp {
   font-size: 18px;
   text-align: center;
-  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .valor-final {
   font-size: 18px;
   font-weight: bold;
+  text-align: center;
+}
+
+.livro-card {
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.isbn {
+  font-size: 12px;
+  font-weight: bold;
+  color: #666;
+  margin-right: 10px;
+}
+
+.titulo {
+  flex-grow: 1; /* Ocupa o máximo de espaço disponível */
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.valor {
+  color: #009732; /* Verde */
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.quantidade {
+  font-size: 24px;
+  font-weight: bold;
+  margin-right: 25px;
 }
 
 
@@ -60,6 +110,25 @@
   max-width: 90%;
   max-height: 90%;
   overflow-y: auto;
+}
+
+.total-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-label {
+  margin-left: 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.valor-total-modal {
+  margin-right: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #009732; /* Verde */
 }
 
 .close {
@@ -176,4 +245,8 @@ th {
 .data-seletor input[type="date"]:focus {
   outline: none;
   border-color: #6c63ff;
+}
+
+.date {
+  margin-right: 0px;
 }

@@ -6,31 +6,37 @@ function RelatorioVendas() {
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
   const [relatorio, setRelatorio] = useState(null);
-  const [relatorioLivrosVendidos, setRelatorioLivrosVendidos] = useState(null); // Adicionado
+  const [relatorioLivrosVendidos, setRelatorioLivrosVendidos] = useState(null);
   const [erro, setErro] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     
     try {
+      let inicioDate = new Date(dataInicio);
+      let fimDate = new Date(dataFim);
+
+      inicioDate.setHours(inicioDate.getHours() + 3);
+      fimDate.setHours(fimDate.getHours() + 27);
+  
       const response = await fetch(apiUrl+'/relatorio-vendas', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          dataInicio: `${dataInicio}T00:00:00.000Z`,
-          dataFim: `${dataFim}T23:59:59.999Z`,
+          dataInicio: inicioDate,
+          dataFim: fimDate,
         }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Erro ao gerar relatório de vendas');
       }
-
+  
       const data = await response.json();
       setRelatorio(data);
-      await handleRelatorioLivrosVendidos(); // Adicionado
+      await handleRelatorioLivrosVendidos();
       setErro('');
     } catch (error) {
       setRelatorio(null);
@@ -40,14 +46,20 @@ function RelatorioVendas() {
 
   const handleRelatorioLivrosVendidos = async () => {
     try {
+      const inicioDate = new Date(dataInicio);
+      const fimDate = new Date(dataFim);
+
+      inicioDate.setHours(inicioDate.getHours() + 3);
+      fimDate.setHours(fimDate.getHours() + 27);
+  
       const response = await fetch(apiUrl+'/relatorio-livros-vendidos', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          dataInicio: `${dataInicio}T00:00:00.000Z`,
-          dataFim: `${dataFim}T23:59:59.999Z`,
+          dataInicio: inicioDate,
+          dataFim: fimDate,
         }),
       });
   
@@ -57,17 +69,14 @@ function RelatorioVendas() {
   
       const data = await response.json();
   
-      // Verifica se o livro já está na lista de relatório de livros vendidos
       const uniqueLivrosVendidos = [];
       data.forEach(livro => {
         const existingBookIndex = uniqueLivrosVendidos.findIndex(
           item => item.ISBN === livro.ISBN && item['Valor Vendido'] === livro['Valor Vendido']
         );
         if (existingBookIndex !== -1) {
-          // Se o livro já estiver na lista, apenas atualiza a quantidade
           uniqueLivrosVendidos[existingBookIndex].Quantidade += livro.Quantidade;
         } else {
-          // Se o livro não estiver na lista, adiciona-o
           uniqueLivrosVendidos.push(livro);
         }
       });
@@ -75,11 +84,50 @@ function RelatorioVendas() {
       setRelatorioLivrosVendidos(uniqueLivrosVendidos);
       setErro('');
     } catch (error) {
-      setRelatorioLivrosVendidos([]); // Corrigido
+      setRelatorioLivrosVendidos([]);
       setErro(error.message);
     }
   };
-  
+
+  const handleDownload = async () => {
+    try {
+      let inicioDate = new Date(dataInicio);
+      let fimDate = new Date(dataFim);
+
+      inicioDate.setHours(inicioDate.getHours() + 3);
+      fimDate.setHours(fimDate.getHours() + 27);
+
+      const response = await fetch(apiUrl+'/relatorio-livros-vendidos-xlsx', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          dataInicio: inicioDate,
+          dataFim: fimDate,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao baixar o relatório');
+      }
+
+      // Transformar a resposta em um blob
+      const blob = await response.blob();
+
+      // Criar um link temporário para fazer o download do arquivo
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `relatorio_livros_vendidos_${Date.now()}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error('Erro ao baixar o relatório:', error);
+      setErro('Erro ao baixar o relatório');
+    }
+  };
 
   return (
     <div className="relatorio-container">
@@ -105,9 +153,10 @@ function RelatorioVendas() {
             required
           />
         </div>
-        <button type="submit" onClick={handleSubmit}>Gerar Relatório de Vendas e Livros Vendidos</button>
+        <button type="submit" onClick={handleSubmit}>Gerar Relatório</button>
+        <button onClick={handleDownload}>Baixar Relatório</button>
       </form>
-
+  
       {relatorioLivrosVendidos && (
         <div className="tabela-livros-vendidos">
           <h3>Tabela de Livros Vendidos</h3>
@@ -135,10 +184,9 @@ function RelatorioVendas() {
           </table>
         </div>
       )}
-
+  
       {relatorio && (
         <div className="relatorio">
-          <h3>Relatório para o período {dataInicio} - {dataFim}</h3>
           <p>Total de Vendas: {relatorio.totalVendas}</p>
           <p>Total de Produtos Vendidos: {relatorio.totalProdutosVendidos}</p>
           <p>Valor Total de Vendas: R${relatorio.valorTotalVendas.toFixed(2)}</p>
@@ -146,7 +194,7 @@ function RelatorioVendas() {
           {/* Adicione outras informações desejadas aqui */}
         </div>
       )}
-
+  
       {erro && <p className="erro">{erro}</p>}
     </div>
   );

@@ -184,50 +184,7 @@ function NovaVenda() {
     <div className="NovaVenda">
       {showModal && (
         <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={handleModalClose}>&times;</span>
-            <h2>Adicionar Cliente</h2>
-            <form>
-              <div className="form-group">
-                <label htmlFor="nome">Nome*</label>
-                <input name="nome" value={cliente.nome} onChange={handleInputChangeCliente} required />
-              </div>
-              <div className="form-group">
-                <label htmlFor="cpf">CPF*</label>
-                <input name="cpf" value={cliente.cpf} onChange={handleInputChangeCliente} required />
-              </div>
-              <div className="form-group">
-                <label htmlFor="email">E-mail*</label>
-                <input name="email" value={cliente.email} onChange={handleInputChangeCliente} required />
-              </div>
-              <div className="form-group">
-                <label htmlFor="telefone">Telefone</label>
-                <input name="telefone" value={cliente.telefone} onChange={handleInputChangeCliente} />
-              </div>
-              <div className="form-group">
-                <label htmlFor="cep">CEP</label>
-                <input name="cep" value={cliente.cep} onChange={handleInputChangeCliente} />
-              </div>
-              <div className="form-group">
-                <label htmlFor="endereco">Endereço</label>
-                <input name="endereco" value={cliente.endereco} onChange={handleInputChangeCliente} />
-              </div>
-              <div className="form-group">
-                <label htmlFor="bairro">Bairro</label>
-                <input name="bairro" value={cliente.bairro} onChange={handleInputChangeCliente} />
-              </div>
-              <div className="form-group">
-                <label htmlFor="cidade">Cidade</label>
-                <input name="cidade" value={cliente.cidade} onChange={handleInputChangeCliente} />
-              </div>
-              <div className="form-group">
-                <label htmlFor="estado">Estado</label>
-                <input name="estado" value={cliente.estado} onChange={handleInputChangeCliente} />
-              </div>
-              <button className="salvar-button" onClick={(event) => handleSalvarCliente(event)}>Salvar</button>
-              <button className="cancelar-button" onClick={handleCancelarCliente}>Cancelar</button>
-            </form>
-          </div>
+          {/* Conteúdo do modal */}
         </div>
       )}
 
@@ -242,60 +199,73 @@ function NovaVenda() {
           onKeyPress={handleKeyPress}
         />
       </div>
-      <div className="lista-livros">
-        <table>
-          <thead>
-            <tr>
-              <th>ISBN</th>
-              <th>Título</th>
-              <th>Editora</th>
-              <th>Autor</th>
-              <th>PVP</th>
-              <th>Preço Feira</th>
-              <th>Quantidade</th>
-              <th>Desconto (%)</th>
-              <th>Subtotal</th>
-              <th>Remover</th>
-            </tr>
-          </thead>
-          <tbody>
-            {livros.map((livro, index) => (
-              <tr key={index}>
-                <td>{livro.ISBN}</td>
-                <td>{livro.Título}</td>
-                <td>{livro.Editora}</td>
-                <td>{livro.Autor}</td>
-                <td>R${livro.Valor.toFixed(2)}</td>
-                <td>R${livro['Valor Feira'].toFixed(2)}</td>
-                <td>
-                  <FaMinusCircle onClick={() => handleEditQuantidade(livro, Math.max(1, livro.Quantidade - 1))} />
-                  <span className="quantidade">{livro.Quantidade}</span>
-                  <FaPlusCircle onClick={() => handleEditQuantidade(livro, Math.min(livro.Quantidade + 1, livro.Estoque))} />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    value={livro.Desconto || 0}
-                    onChange={(event) => handleDescontoChange(livro, event)}
-                  />
-                </td>
-                <td>R${calcularSubtotal(livro)}</td>
-                <td><FaTrashAlt onClick={() => handleRemoveLivro(livro.ISBN)} /></td>
+
+      {livros.length > 0 && (
+        <div className="lista-livros">
+          <table>
+            <thead>
+              <tr>
+                <th>ISBN</th>
+                <th>Título</th>
+                <th>Editora</th>
+                <th>Autor</th>
+                <th>PVP</th>
+                <th>Preço Feira</th>
+                <th>Quantidade</th>
+                <th>Desconto (%)</th>
+                <th>Subtotal</th>
+                <th>Remover</th>
               </tr>
-            ))}
-            <tr>
-              <td colSpan="6">Totais:</td>
-              <td>{totalQuantidade}</td>
-              <td></td>
-              <td>R${totalPrecoDesconto.toFixed(2)}</td>
-            </tr>
-          </tbody>
-        </table>
-        {cliente.nome && <p>Nome do Cliente: {cliente.nome.split(' ')[0]}</p>}
-        <button className="btn-add-cliente" onClick={handleAddCliente}><FaUserPlus /> Adicionar Cliente</button>
-        <button className="btn-registrar-venda" onClick={handleRegistrarVenda}><FaShoppingCart />Registrar Venda</button>
-      </div>
-      
+            </thead>
+            <tbody>
+              {livros.map((livro, index) => (
+                <tr key={index}>
+                  <td>{livro.ISBN}</td>
+                  <td>{livro.Título}</td>
+                  <td>{livro.Editora}</td>
+                  <td>{livro.Autor}</td>
+                  <td style={{ textDecoration: 'line-through', color: 'red' }}>R${livro.Valor.toFixed(2)}</td>
+                  <td style={{ color: 'green' }}>R${livro['Valor Feira'].toFixed(2)}</td>
+                  <td>
+                    <div className="quantidade-buttons">
+                      <FaMinusCircle onClick={() => handleEditQuantidade(livro, Math.max(1, livro.Quantidade - 1))} />
+                      <span className="quantidade">{livro.Quantidade}</span>
+                      <FaPlusCircle onClick={() => handleEditQuantidade(livro, Math.min(livro.Quantidade + 1, livro.Estoque))} />
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      className="discount-input"
+                      type="number"
+                      value={livro.Desconto || 0}
+                      onChange={(event) => handleDescontoChange(livro, event)}
+                    />
+                  </td>
+                  <td>R${calcularSubtotal(livro)}</td>
+                  <td>
+                    <button className="remove-button" onClick={() => handleRemoveLivro(livro.ISBN)}>
+                      <FaTrashAlt />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              <tr className="total-row">
+                <td colSpan="6">Totais:</td>
+                <td>{totalQuantidade}</td>
+                <td></td>
+                <td>R${totalPrecoDesconto.toFixed(2)}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          {cliente.nome && <p>Nome do Cliente: {cliente.nome.split(' ')[0]}</p>}
+          <div className="buttons-container">
+            <button className="btn-add-cliente" onClick={handleAddCliente}><FaUserPlus /> Adicionar Cliente</button>
+            <button className="btn-registrar-venda" onClick={handleRegistrarVenda}><FaShoppingCart />Registrar Venda</button>
+          </div>
+        </div>
+      )}
+
       {erro && <p className="erro">{erro}</p>}
     </div>
   );

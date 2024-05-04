@@ -47,8 +47,8 @@ function App() {
       </header>
       <nav className={`menu ${mobileMenuOpen ? 'open' : ''}`}>
       <button className={`hide-mobile ${selectedComponent === 'NovaVenda' ? 'active' : ''}`} onClick={() => setSelectedComponent('NovaVenda')}>Nova Venda</button>
-      <button className={`hide-mobile ${selectedComponent === 'PesquisaLivro' ? 'active' : ''}`} onClick={() => setSelectedComponent('PesquisaLivro')}>Venda Rápida</button>
-      <button className={`hide-mobile ${selectedComponent === 'ListaVendas' ? 'active' : ''}`} onClick={() => setSelectedComponent('ListaVendas')}>Vendas</button>
+      <button className={`${selectedComponent === 'PesquisaLivro' ? 'active' : ''}`} onClick={() => setSelectedComponent('PesquisaLivro')}>Venda Rápida</button>
+      <button className={`${selectedComponent === 'ListaVendas' ? 'active' : ''}`} onClick={() => setSelectedComponent('ListaVendas')}>Vendas</button>
       <button className={`hide-mobile ${selectedComponent === 'ListarClientes' ? 'active' : ''}`} onClick={() => setSelectedComponent('ListarClientes')}>Clientes</button>
       <button className={`hide-mobile ${selectedComponent === 'FileUpload' ? 'active' : ''}`} onClick={() => setSelectedComponent('FileUpload')}>Adicionar Estoque</button> 
       <button className={`hide-mobile ${selectedComponent === 'ListarLivro' ? 'active' : ''}`} onClick={() => setSelectedComponent('ListarLivro')}>Pesquisar</button>
@@ -58,7 +58,7 @@ function App() {
         <div className="main-content">{renderComponent(selectedComponent)}</div>
       </main>
       <footer>
-        <p>© 2024 LuliBooks. Alguns direitos reservados.</p>
+        <p>© 2024 Lulibros. Alguns direitos reservados.</p>
       </footer>
     </div>
   );
